@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multiplication v1</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="multiplication-client.js"></script>
+</head>
+
+<body>
+<div>
+    <h1>Welcome to Social Multiplication</h1>
+    
+    <h2><span class="result-message"></span></h2>
+
+        <form id="login-form">
+            Username <input type="text" name="user-name"><br>
+            Password <input type="password" name="user-pass"><br>
+            <input type="submit" value="Login">
+            
+        </form>
+    <input id="reg-button" type="button" value="Register">
+    
+            <form id="reg-form">
+           
+            Name <input type="text" name="name"><br>
+            Username <input type="text" name="user-name"><br>
+            Password <input type="password" name="user-pass"><br>
+            <input type="submit" value="Register">
+            
+        </form>
+    <table class="stats" style="width:100%">
+     <h2 class="stats">Products</h2>
+        <tr>     
+                <th>Id</th>
+               <th>Name</th>
+               <th>Brand</th>
+               <th>Description</th>
+               <th>Price</th>
+               <th>Quantity</th>
+        </tr>
+        <tbody id="stats-body"></tbody>
+    </table>
+    
+    
+</div>
+</body>
+</html>
