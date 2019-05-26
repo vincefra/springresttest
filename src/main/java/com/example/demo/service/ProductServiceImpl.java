@@ -13,7 +13,6 @@ import com.example.demo.domain.User;
 import com.example.demo.repository.CartProductRepository;
 import com.example.demo.repository.CartRepository;
 import com.example.demo.repository.ProductRepository;
-import com.example.demo.repository.UserRepository;
 import java.util.List;
 import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Autowired;

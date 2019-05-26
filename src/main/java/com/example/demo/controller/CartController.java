@@ -23,7 +23,9 @@ final class CartController {
     }
 
     @PostMapping()
-    ResponseEntity<Product> postResult(@RequestBody Product product) {
+    ResponseEntity<Product> postResult(@RequestBody int productId) {
+        Product product = productService.findProductByProductId(productId);
+        
         System.out.println(product.getName());
         return ResponseEntity.ok(productService.addToCart(product));
     }

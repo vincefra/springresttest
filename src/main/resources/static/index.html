@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Multiplication v1</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Shoe Shop</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="multiplication-client.js"></script>
@@ -9,40 +10,41 @@
 
 <body>
 <div>
-    <h1>Welcome to Social Multiplication</h1>
-    
-    <h2><span class="result-message"></span></h2>
+    <h1>Welcome to Shoe Shop</h1>
+    <br>
+    <h2><span class="alert alert-primary" role="alert" id="result-message"></span></h2>
 
         <form id="login-form">
-            Username <input type="text" name="user-name"><br>
-            Password <input type="password" name="user-pass"><br>
-            <input type="submit" value="Login">
+            Username <input type="text" class="form-control" name="user-name"><br>
+            Password <input type="password" class="form-control" name="user-pass"><br>
+            <input type="submit" class="btn btn-success" id="login-button" value="Login">
             
         </form>
-    <input class="reg-button" type="button"  value="Register">
+    <input class="btn btn-primary" id ="reg-button" type="button"  value="Register">
     
             <form id="reg-form">
            
-            Name <input type="text" name="name"><br>
-            Username <input type="text" name="user-name"><br>
-            Password <input type="password" name="user-pass"><br>
+            Name <input type="text" class="form-control" name="name"><br>
+            Username <input type="text" class="form-control" name="user-name"><br>
+            Password <input type="password" class="form-control" name="user-pass"><br>
             <input type="submit" value="Register">
             
         </form>
-    <table class="stats" style="width:100%">
-     <h2 class="stats">Products</h2>
-        <tr>     
+    <table class="table" id="stats" style="width:100%">
+    <br>
+    <br>
+        <thead>
+            <tr>     
                 <th>Id</th>
-               <th>Name</th>
-               <th>Brand</th>
-               <th>Description</th>
-               <th>Price</th>
-               <th>Quantity</th>
-        </tr>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Option</th>
+            </tr>
+        </thead>
         <tbody id="stats-body"></tbody>
     </table>
-    
-    
 </div>
 </body>
 </html>

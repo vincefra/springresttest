@@ -1,17 +1,41 @@
 function displayProducts() {
-    $.ajax({
-        url: "http://localhost:8080/customer",
-    }).then(function (data) {
-        $('#stats').empty();
-        data.forEach(function (row) {
-            $('#stats-body').append("<tr><td class='id'>" + row.id + "</td>" +
-                    "<td>" + row.productType + "</td>" +
-                    "<td>" + row.description + "</td>" +
-                    "<td>" + row.price + "</td>" +
-                    "<td><button type='button' action='"+addToCart(row)+"'>add To Cart</button></td></tr>");
-                });
-               
+    $.ajax(
+        {
+            url: "http://localhost:8080/customer",
+        }).then(function (data) {
+
+        data.forEach(function (row) 
+        {
+            $('#stats-body').append(
+                "<tr>" + 
+                "<td>" + row.id + "</td>" +
+                "<td>" + row.name + "</td>" +
+                "<td>" + row.brand + "</td>" +
+                "<td>" + row.description + "</td>" +
+                "<td>" + row.price + "</td>" +
+                "<td><button class='btn btn-success' onclick='addToCart(" + row.id + ")'>add To Cart</button></td></tr>");
+        });       
     });
+}
+
+/*
+ * Gjorde om button till button onclick, den lästes annars som att den anropade metoden istället, det var aldrig en onclick
+ * Gjorde om reg-button hide, det klassades som id istället (eller tvärtom, minns ej)
+ * Kodade om addToCart att den hanterar row.id istället för objekt, fick problem annars
+ * Kodade om serverdelen att den tar emot product id, söker upp i db och skapar upp nytt product objekt
+ */
+
+function preLogin(){
+    $("#stats").hide();
+    $("#reg-form").hide();
+    $("#result-message").hide();
+}
+
+function registerClick(){
+    event.preventDefault();
+    $("#login-form").hide();
+    $("#reg-button").hide();
+    $("#reg-form").show();
 }
 
 
@@ -28,10 +52,11 @@ function addToCart(data){
             async: false,
             success: function (result) {
                 console.log(result);
+                $("#result-message").show();
                 if (result.id >0) {
-                    $('.result-message').empty().append("You added a product: "+ result.productType);
+                    $('#result-message').empty().append("You added a product: "+ result.productType);
                     $("#login-form").hide();
-                    $("#reg-button").hide();
+                    $(".reg-button").hide();
                     $(".stats").show();                    
                 } else {
                     $('.result-message').empty().append("Ooops that's not correct! But keep trying!");
@@ -46,41 +71,24 @@ function addToCart(data){
 $(document).ready(function () {
 
     displayProducts();
+    preLogin();
     
-        $("#test").click(function (event){
-        event.preventDefault();
-        var hej = "hej";
-        console.log(hej);
-//        var currentTR = $(this).closest("tr");
-//        var id = currentTR.find("td.id").text();
-//        console.log(id);
-    }); 
-    
-    
-    $(".addToCart").click(function (event){
-        event.preventDefault();
-        var hej = "hej";
-        console.log(hej);
-//        var currentTR = $(this).closest("tr");
-//        var id = currentTR.find("td.id").text();
-//        console.log(id);
-    }); 
-    $(".stats").hide();
-    $("#reg-form").hide();
-    $("#reg-button").click(function (event) {
-        event.preventDefault();
-        $("#login-form").hide();
-        $("#reg-button").hide();
-        $("#reg-form").show();
+    $(".reg-button").click(function (event) 
+    {
+        registerClick();
     });
+    
+    
     $("#login-form").submit(function (event) {
 
-// Don't submit the form normally
+    // Don't submit the form normally
         event.preventDefault();
+        
         // Get some values from elements on the page
         var $form = $(this),
                 username = $form.find("input[name='user-name']").val(),
                 password = $form.find("input[name='user-pass']").val();
+                
         // Compose the data in the format that the API is expecting
         var data = {username: username, password: password};
         // Send the data using post
@@ -94,12 +102,12 @@ $(document).ready(function () {
             success: function (result) {
                 console.log(result);
                 if (result.username !== null) {
-                    $('.result-message').empty().append("You have logged in: " + result.username);
+                    $('#result-message').empty().append("You have logged in: " + result.username);
                     $("#login-form").hide();
                     $("#reg-button").hide();
-                    $(".stats").show();                    
+                    $("#stats").show();                    
                 } else {
-                    $('.result-message').empty().append("Ooops that's not correct! But keep trying!");
+                    $('#result-message').empty().append("Ooops that's not correct! But keep trying!");
                 }
             }
         });
@@ -108,7 +116,7 @@ $(document).ready(function () {
 
     $("#reg-form").submit(function (event) {
 
-// Don't submit the form normally
+    // Don't submit the form normally
         event.preventDefault();
         // Get some values from elements on the page
         var $form = $(this),
@@ -128,12 +136,12 @@ $(document).ready(function () {
             success: function (result) {
                 console.log(result);
                 if (result.username !== null ) {
-                    $('.result-message').empty().append("You have been registered");
+                    $('#result-message').empty().append("You have been registered");
                     $("#reg-form").hide();
                     $("#login-form").show();
                     $("#reg-button").show();
                 } else {
-                    $('.result-message').empty().append("Ooops there is already a user!");
+                    $('#result-message').empty().append("Ooops there is already a user!");
                 }
             }
         });
