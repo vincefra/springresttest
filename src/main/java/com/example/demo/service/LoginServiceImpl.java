@@ -17,6 +17,8 @@ public class LoginServiceImpl implements LoginService {
     private final UserRepository userRepository;
 
     private final ProductRepository productRepository;
+    
+    private User user;
 
     @Autowired
     public LoginServiceImpl(final UserRepository userRepository, ProductRepository productRepository) {
@@ -26,19 +28,12 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public User getLoginUser(User user) {
-        userRepository.save(new User("a", "test1", "test"));
-        userRepository.save(new User("b", "test2", "test"));
-        userRepository.save(new User("c", "test3", "test"));
-        userRepository.save(new User("d", "test4", "test"));
-        productRepository.save(new Product("string1", "namn", "brand", "description", 100.0, 100.0));
-        productRepository.save(new Product("string2", "namn", "brand", "description", 100.0, 100.0));
-        productRepository.save(new Product("string3", "namn", "brand", "description", 100.0, 100.0));
-        productRepository.save(new Product("string4", "namn", "brand", "description", 100.0, 100.0));
-        productRepository.save(new Product("string5", "namn", "brand", "description", 100.0, 100.0));
+
         List<User> users = getAllusers();
         for (User u : users) {
             if (u.getUsername().equalsIgnoreCase(user.getUsername())
                     && u.getPassword().equals(user.getPassword())) {
+                setUser(u);
                 return u;
             }
         }
@@ -72,4 +67,14 @@ public class LoginServiceImpl implements LoginService {
         return new User();
 
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
+    
 }

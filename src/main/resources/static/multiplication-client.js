@@ -4,17 +4,67 @@ function displayProducts() {
     }).then(function (data) {
         $('#stats').empty();
         data.forEach(function (row) {
-            $('#stats-body').append('<tr><td>' + row.id + '</td>' +
-                    '<td>' + row.productType + '</td>' +
-                    '<td>' + row.description + '</td>' +
-                    '<td>' + row.price + '</td>' +
-                    '<td>' + row.premiumPrice + '</td></tr>');
-        });
+            $('#stats-body').append("<tr><td class='id'>" + row.id + "</td>" +
+                    "<td>" + row.productType + "</td>" +
+                    "<td>" + row.description + "</td>" +
+                    "<td>" + row.price + "</td>" +
+                    "<td><button type='button' action='"+addToCart(row)+"'>add To Cart</button></td></tr>");
+                });
+               
     });
 }
 
+
+
+function addToCart(data){
+    
+    var data = data;
+    $.ajax({
+            url: '/addToCart',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                console.log(result);
+                if (result.id >0) {
+                    $('.result-message').empty().append("You added a product: "+ result.productType);
+                    $("#login-form").hide();
+                    $("#reg-button").hide();
+                    $(".stats").show();                    
+                } else {
+                    $('.result-message').empty().append("Ooops that's not correct! But keep trying!");
+                }
+            }
+        });
+    
+    
+}
+
+
 $(document).ready(function () {
+
     displayProducts();
+    
+        $("#test").click(function (event){
+        event.preventDefault();
+        var hej = "hej";
+        console.log(hej);
+//        var currentTR = $(this).closest("tr");
+//        var id = currentTR.find("td.id").text();
+//        console.log(id);
+    }); 
+    
+    
+    $(".addToCart").click(function (event){
+        event.preventDefault();
+        var hej = "hej";
+        console.log(hej);
+//        var currentTR = $(this).closest("tr");
+//        var id = currentTR.find("td.id").text();
+//        console.log(id);
+    }); 
     $(".stats").hide();
     $("#reg-form").hide();
     $("#reg-button").click(function (event) {
@@ -53,9 +103,6 @@ $(document).ready(function () {
                 }
             }
         });
-        // updateMultiplication();
-        // 
-
     });
 
 

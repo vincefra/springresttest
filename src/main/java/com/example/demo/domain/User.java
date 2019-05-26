@@ -40,6 +40,13 @@ public class User {
         this.password = password;
         this.roles = "customer";
     }
+    
+    public User (String name, String username, String password, String roles){
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
 
     public Long getId() {
         return id;

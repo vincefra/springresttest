@@ -14,13 +14,11 @@ public class Cart {
     private Long id;
     @OneToOne
     private User user;
-    
     private int quantity;
     private double totalprice;
     private boolean purchased;
     
-    public Cart(int quantity, double totalPrice, double price){
-        this.quantity = quantity;
+    public Cart(double totalPrice, double price){
         this.totalprice = totalPrice;
         this.purchased = false;
         

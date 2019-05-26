@@ -13,5 +13,5 @@ import java.util.List;
 public interface ProductService {
     List<Product> getAllProducts();
     Product findProductByProductId(long productId);
-    
+    Product addToCart(Product product);
 }
