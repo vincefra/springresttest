@@ -18,6 +18,21 @@ function displayProducts() {
     });
 }
 
+function displayCart() {
+    $.ajax({
+        url: "http://localhost:8080/cart",
+    }).then(function (data) {
+        $('#stats').empty();
+        data.forEach(function (row) {
+            $('#stats-body').append('<tr><td>' + row.id + '</td>' +
+                    '<td>' + row.name + '</td>' +
+                    '<td>' + row.brand + '</td>' +
+                    '<td>' + row.descrption + '</td>' +
+                    '<td>' + row.price + '</td>');
+        });
+    });
+}
+
 /*
  * Gjorde om button till button onclick, den lästes annars som att den anropade metoden istället, det var aldrig en onclick
  * Gjorde om reg-button hide, det klassades som id istället (eller tvärtom, minns ej)
@@ -38,10 +53,7 @@ function registerClick(){
     $("#reg-form").show();
 }
 
-
-
 function addToCart(data){
-    
     var data = data;
     $.ajax({
             url: '/addToCart',
@@ -62,9 +74,7 @@ function addToCart(data){
                     $('.result-message').empty().append("Ooops that's not correct! But keep trying!");
                 }
             }
-        });
-    
-    
+        }); 
 }
 
 

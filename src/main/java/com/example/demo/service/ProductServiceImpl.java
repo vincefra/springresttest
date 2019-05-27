@@ -13,6 +13,7 @@ import com.example.demo.domain.User;
 import com.example.demo.repository.CartProductRepository;
 import com.example.demo.repository.CartRepository;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.UserRepository;
 import java.util.List;
 import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class ProductServiceImpl implements ProductService{
     
     @Autowired
     private CartProductRepository cartProductRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Product> getAllProducts() {
@@ -52,12 +56,33 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product addToCart(Product product) {
         User user = loginServiceImpl.getUser();
-        Cart cart = new Cart();
+        Cart cart = user.getCart();
+        
+        //kolla ifall cart inte är null, ifall cart är köpt? skapa ny cart
+        if (cart != null)
+        {
+            if (cart.isPurchased())
+                cart = new Cart();
+        }
+        else 
+            cart = new Cart();
+        
+        //setta cart och user till varandra, dvs koppla ihop
         cart.setUser(user);
-        CartProduct cp = new CartProduct(product,cart,1);
+        user.setCart(cart);
+        
+        //ny cartProduct
+        CartProduct cp = new CartProduct(product, cart, 1);
+        
+        //spara cart
         cartRepository.save(cart);
+        
+        //spara cartProduct
         cartProductRepository.save(cp);
+        
+        //spara user -> cart
+        userRepository.save(user);
+        
         return product;
     }
-
 }
