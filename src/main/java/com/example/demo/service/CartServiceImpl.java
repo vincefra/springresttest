@@ -1,4 +1,4 @@
-package com.example.demo.service;
+    package com.example.demo.service;
 
 import com.example.demo.domain.Cart;
 import com.example.demo.repository.CartRepository;
@@ -39,14 +39,16 @@ public class CartServiceImpl implements CartService{
     public Cart cartCompleted() {
         List<Cart> carts = cartRepository.findAll();
         for(Cart c : carts)
-            if(c.getUser().getUsername().equalsIgnoreCase(loginServiceImpl.getUser().getUsername()) && !c.isPurchased())
+            if(!c.isPurchased()){
+            if(c.getUser().getUsername().equalsIgnoreCase(loginServiceImpl.getUser().getUsername()))
             {
                 c.setTotalprice(cartProductService.countTotalPrice(loginServiceImpl.getUser()));
                 c.setPurchased(true);
                 saveOrUpdate(c);
+                loginServiceImpl.getUser().setCart(new Cart());
                 return c;
             }
-            
+            }
         return null;
     }
 }

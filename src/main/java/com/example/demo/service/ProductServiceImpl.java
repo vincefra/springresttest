@@ -60,17 +60,16 @@ public class ProductServiceImpl implements ProductService{
         Cart cart = user.getCart();
         
         //kolla ifall cart inte är null, ifall cart är köpt? skapa ny cart
-        if (cart != null)
+        if (cart == null)
         {
-            if (cart.isPurchased())
-                cart = new Cart();
+            cart = new Cart();
         }
-        else 
+        else if (cart.isPurchased())
             cart = new Cart();
         
         //setta cart och user till varandra, dvs koppla ihop
         cart.setUser(user);
-        user.setCart(cart);
+        loginServiceImpl.getUser().setCart(cart);
         
         //ny cartProduct
         CartProduct cp = new CartProduct(product, cart, 1);

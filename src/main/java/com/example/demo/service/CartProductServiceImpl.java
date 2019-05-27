@@ -35,9 +35,11 @@ public class CartProductServiceImpl implements CartProductService{
     public List<Product> getCartProductsForCustomer() {
         List<Product> cartProductsList = new ArrayList<>();
         for(CartProduct cp : cartProductRepository.findAll()){
+            if(!cp.getCart().isPurchased()){
            if(cp.getCart().getUser().getUsername().equalsIgnoreCase(loginServiceImpl.getUser().getUsername())){
                cartProductsList.add(cp.getProduct());
            }
+        }
         }
         return cartProductsList;
     }

@@ -14,7 +14,11 @@ function displayProducts() {
                 "<td>" + row.description + "</td>" +
                 "<td>" + row.price + "</td>" +
                 "<td><button class='btn btn-success' onclick='addToCart(" + row.id + ")'>add To Cart</button></td></tr>");
-        });       
+        }); 
+        $("#cart-button").show();
+        $("#purchase-button").hide();
+        $("#product-button").hide();
+
     });
 }
 
@@ -29,8 +33,15 @@ function displayCart() {
                     '<td>' + row.brand + '</td>' +
                     '<td>' + row.descrption + '</td>' +
                     '<td>' + row.price + '</td>' +
-                    "<td><button class='btn btn-success' onclick='removeFromCart(" + row.id + ")'>Remove Product</button></td></tr>");
+                    "<td><button class='btn btn-success remove-button' onclick='removeFromCart(" + row.id + ")'>Remove Product</button></td></tr>");
         });
+            $("#cart-button").hide();
+            $("#purchase-button").show();
+            $("#product-button").show();
+            $(".remove-button").show();
+
+
+
     });
 }
 
@@ -41,10 +52,20 @@ function displayCart() {
  * Kodade om serverdelen att den tar emot product id, söker upp i db och skapar upp nytt product objekt
  */
 
+function hideCartButtons(){
+    $("#cart-button").hide();
+    $("#product-button").hide();
+    $("#purchase-button").hide();
+}
+
 function preLogin(){
     $("#stats").hide();
     $("#reg-form").hide();
     $("#result-message").hide();
+    $("#product-button").hide();
+    $("#purchase-button").hide();
+    $("#cart-button").hide();
+
 }
 
 function registerClick(){
@@ -65,6 +86,7 @@ function purchase(){
                     $('#result-message').empty().append("Your orderid: "+ data.id + " - Totalprice: " + data.totalprice + "USD");
                     $("#login-form").hide();
                     $(".reg-button").hide();
+                    $(".remove-button").hide();
                     $(".stats").show();                    
                 } else {
                     $('.result-message').empty().append("No!");
@@ -143,10 +165,7 @@ function removeFromCart(data){
 
 $(document).ready(function () {
 
-    displayProducts();
     preLogin();
-    
-    
     $("#login-form").submit(function (event) {
 
     // Don't submit the form normally
@@ -170,9 +189,11 @@ $(document).ready(function () {
             success: function (result) {
                 console.log(result);
                 if (result.username !== null) {
+                    displayProducts();
                     $('#result-message').empty().append("You have logged in: " + result.username);
                     $("#login-form").hide();
                     $("#reg-button").hide();
+                    $("#cart-button").show();
                     $("#stats").show();                    
                 } else {
                     $('#result-message').empty().append("Ooops that's not correct! But keep trying!");
