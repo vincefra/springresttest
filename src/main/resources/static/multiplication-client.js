@@ -73,11 +73,6 @@ $(document).ready(function () {
     displayProducts();
     preLogin();
     
-    $(".reg-button").click(function (event) 
-    {
-        registerClick();
-    });
-    
     
     $("#login-form").submit(function (event) {
 

@@ -47,6 +47,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public User registerUser(User user) {
+        
         List<User> users = getAllusers();
         // if-satsen ska tas bort när vi skapat databasen
         if(users.size() > 0){
@@ -55,17 +56,17 @@ public class LoginServiceImpl implements LoginService {
                 user.setRoles();
                 userRepository.save(user);
                 return user;
+                }
             }
         }
-        }
         // Detta ska vi ta bort när vi har skapat databasen
-        else{
+        else {
             user.setRoles();
             userRepository.save(user);
             return user;
         }
+        
         return new User();
-
     }
 
     public User getUser() {

@@ -15,19 +15,20 @@
     <h2><span class="alert alert-primary" role="alert" id="result-message"></span></h2>
 
         <form id="login-form">
-            Username <input type="text" class="form-control" name="user-name"><br>
-            Password <input type="password" class="form-control" name="user-pass"><br>
-            <input type="submit" class="btn btn-success" id="login-button" value="Login">
-            
+            Username <input type="text" class="form-control" name="user-name" required><br>
+            Password <input type="password" class="form-control" name="user-pass" required><br>
+            <input type="submit" class="btn btn-success" id="login-button" value="Login"> 
         </form>
-    <input class="btn btn-primary" id ="reg-button" type="button"  value="Register">
     
-            <form id="reg-form">
+
+    <button class="btn btn-primary" id="reg-button" onclick="registerClick()">Register</button>
+    
+        <form id="reg-form">
            
-            Name <input type="text" class="form-control" name="name"><br>
-            Username <input type="text" class="form-control" name="user-name"><br>
-            Password <input type="password" class="form-control" name="user-pass"><br>
-            <input type="submit" value="Register">
+            Name <input type="text" class="form-control" name="name" required><br>
+            Username <input type="text" class="form-control" name="user-name" required><br>
+            Password <input type="password" class="form-control" name="user-pass" required><br>
+            <input class="btn btn-primary" type="submit" value="Register">
             
         </form>
     <table class="table" id="stats" style="width:100%">
