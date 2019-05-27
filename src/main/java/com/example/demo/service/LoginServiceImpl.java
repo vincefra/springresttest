@@ -34,6 +34,12 @@ public class LoginServiceImpl implements LoginService {
         }
         return new User();
     }
+    
+    @Override
+    public User getUser() {
+        return this.user;
+    }
+    
 
     @Override
     public List<User> getAllusers() {
@@ -64,9 +70,6 @@ public class LoginServiceImpl implements LoginService {
         return new User();
     }
 
-    public User getUser() {
-        return user;
-    }
 
     public void setUser(User user) {
         this.user = user;

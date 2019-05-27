@@ -16,5 +16,6 @@ public interface LoginService {
    List<User> getAllusers();
    User getLoginUser(User user);
    User registerUser(User user);
+   User getUser();
     
 }

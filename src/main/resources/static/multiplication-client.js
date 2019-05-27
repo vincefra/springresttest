@@ -1,9 +1,9 @@
 function displayProducts() {
     $.ajax(
         {
-            url: "http://localhost:8080/customer",
+            url: "/customer",
         }).then(function (data) {
-
+        $('#stats-body').empty();
         data.forEach(function (row) 
         {
             $('#stats-body').append(
@@ -20,15 +20,16 @@ function displayProducts() {
 
 function displayCart() {
     $.ajax({
-        url: "http://localhost:8080/cart",
+        url: "/cart/products",
     }).then(function (data) {
-        $('#stats').empty();
+        $('#stats-body').empty();
         data.forEach(function (row) {
             $('#stats-body').append('<tr><td>' + row.id + '</td>' +
                     '<td>' + row.name + '</td>' +
                     '<td>' + row.brand + '</td>' +
                     '<td>' + row.descrption + '</td>' +
-                    '<td>' + row.price + '</td>');
+                    '<td>' + row.price + '</td>' +
+                    "<td><button class='btn btn-success' onclick='removeFromCart(" + row.id + ")'>Remove Product</button></td></tr>");
         });
     });
 }
@@ -53,10 +54,52 @@ function registerClick(){
     $("#reg-form").show();
 }
 
+function purchase(){
+    $.ajax(
+        {
+            url: "/cart/buy",
+        }).then(function (data) {
+                console.log(data.id);
+                $("#result-message").show();
+                if (data.id >0) {
+                    $('#result-message').empty().append("Your orderid: "+ data.id + " - Totalprice: " + data.totalprice + "USD");
+                    $("#login-form").hide();
+                    $(".reg-button").hide();
+                    $(".stats").show();                    
+                } else {
+                    $('.result-message').empty().append("No!");
+                }
+            }); 
+}
+
+function purchase2(){
+    var data = 1;
+    $.ajax({
+            url: '/cart/purchased2',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                console.log(result);
+                $("#result-message").show();
+                if (result.id >0) {
+                    $('#result-message').empty().append("You added a product: "+ result.id);
+                    $("#login-form").hide();
+                    $(".reg-button").hide();
+                    $(".stats").show();                    
+                } else {
+                    $('.result-message').empty().append("Ooops that's not correct! But keep trying!");
+                }
+            }
+        }); 
+}
+
 function addToCart(data){
     var data = data;
     $.ajax({
-            url: '/addToCart',
+            url: '/cart/add',
             type: 'POST',
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
@@ -72,6 +115,26 @@ function addToCart(data){
                     $(".stats").show();                    
                 } else {
                     $('.result-message').empty().append("Ooops that's not correct! But keep trying!");
+                }
+            }
+        }); 
+}
+
+function removeFromCart(data){
+    var data = data;
+    $.ajax({
+            url: '/cart/remove',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                console.log(result);
+                $("#result-message").show();
+                if (result.id >0) {
+                    $('#result-message').empty().append("You removed a product: "+ result.productType);
+                    displayCart();                  
                 }
             }
         }); 
