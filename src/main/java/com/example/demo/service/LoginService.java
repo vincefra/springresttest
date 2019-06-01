@@ -14,6 +14,7 @@ public interface LoginService {
     
     
    List<User> getAllusers();
+   List<User> getAllusersNoCart();
    User getLoginUser(User user);
    User registerUser(User user);
    User getUser();

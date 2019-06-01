@@ -24,23 +24,14 @@ public class Product{
 
     public Product(String productType, String brand,
                     String name, String description, 
-                    double price, double premiumPrice) {
+                    double price) {
         //this.carts = carts;
         this.productType = productType;
         this.brand = brand;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.premiumPrice = premiumPrice * 0.9;
-    }
-
-    public Product(String productType, String brand, 
-                   String name, String description, double price) {
-        this.productType = productType;
-        this.brand = brand;
-        this.name = name;
-        this.description = description;
-        this.price = price;
+        this.premiumPrice = price * 0.9;
     }
 
     public Product() {

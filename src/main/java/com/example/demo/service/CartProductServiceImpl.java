@@ -45,6 +45,20 @@ public class CartProductServiceImpl implements CartProductService{
     }
     
     @Override
+    public List<Product> getCartProductsForCustomer(long customerId) {
+        List<Product> cartProductsList = new ArrayList<>();
+        cartProductRepository.findAll().stream().filter((cp) -> (cp.getCart().isPurchased())).filter((cp) -> (cp.getCart().getUser().getId() == customerId)).map((cp) -> {
+            //en fuling för att återställa priset på en produkt som inte är premiumpris, dvs vi köpte varan innan vi blev premium
+            if (!cp.isPremium() && cp.getProduct().getPrice() == cp.getProduct().getPremiumPrice())
+                cp.getProduct().setPrice(cp.getProduct().getPrice() / 9 * 10);
+            return cp;
+        }).forEachOrdered((cp) -> {
+            cartProductsList.add(cp.getProduct());
+        });
+        return cartProductsList;
+    }
+    
+    @Override
     public void removeCartProduct(Product cartProduct) {
         for(CartProduct cp : cartProductRepository.findAll()){
            if(cp.getCart().getUser().getUsername().equalsIgnoreCase(loginServiceImpl.getUser().getUsername()) && cp.getProduct().getId() == cartProduct.getId()){
@@ -65,6 +79,15 @@ public class CartProductServiceImpl implements CartProductService{
             System.out.println(totalPrice);
             return totalPrice;
     }
-
-
+    
+    @Override
+    public boolean checkCartPremium(User user) {
+        double totalPrice = 0;
+        
+        for(CartProduct cp : cartProductRepository.findAll())
+           if(cp.getCart().getUser().getUsername().equalsIgnoreCase(user.getUsername()))
+                totalPrice += cp.getProduct().getPrice();
+                     
+        return totalPrice > 500000;
+    }
 }

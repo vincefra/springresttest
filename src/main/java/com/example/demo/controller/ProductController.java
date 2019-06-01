@@ -18,15 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 final class ProductController {
 
     private final ProductService productService;
+    private final LoginService loginService;
 
     @Autowired
-    public ProductController(final ProductService productService) {
+    public ProductController(final ProductService productService, final LoginService loginService) {
         this.productService = productService;
+        this.loginService = loginService;
     }
 
-    @GetMapping()
-    ResponseEntity<List<Product>> postResult() {
+    @GetMapping("products")
+    ResponseEntity<List<Product>> productResult() {
         return ResponseEntity.ok(productService.getAllProducts());
+    }
+    
+    @GetMapping("admin")
+    ResponseEntity<List<User>> adminResult() {
+        return ResponseEntity.ok(loginService.getAllusersNoCart());
     }
 
 }

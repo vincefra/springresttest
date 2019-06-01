@@ -31,14 +31,25 @@ public class CartProduct {
     
     private int quantity;
     
+    private boolean premium;
+    
     public CartProduct(){
         
     }
-    public CartProduct(Product product, Cart cart, int quantity){
+    public CartProduct(Product product, Cart cart, int quantity, boolean premium){
         this.product = product;
         this.cart = cart;
         this.quantity = quantity;
+        this.premium = premium;
         
+    }
+
+    public boolean isPremium() {
+        return premium;
+    }
+
+    public void setPremium(boolean premium) {
+        this.premium = premium;
     }
 
     public Product getProduct() {

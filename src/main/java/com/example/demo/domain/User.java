@@ -80,8 +80,8 @@ public class User {
         return roles;
     }
 
-    public void setRoles() {
-        this.roles = "customer";
+    public void setRoles(String role) {
+        this.roles = role;
     }
     
     public Cart getCart() {

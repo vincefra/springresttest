@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.domain.Cart;
 import com.example.demo.domain.User;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    @Autowired
+    private CartProductServiceImpl cartProductServiceImpl;
+    
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private User user;
@@ -27,7 +31,18 @@ public class LoginServiceImpl implements LoginService {
         List<User> users = getAllusers();
         for (User u : users) {
             if (u.getUsername().equalsIgnoreCase(user.getUsername())
-                    && u.getPassword().equals(user.getPassword())) {
+                    && u.getPassword().equals(user.getPassword())) 
+            {
+                u.setCart(null);
+                
+                if (!u.getRoles().equalsIgnoreCase("admin"))
+                {
+                    if (cartProductServiceImpl.checkCartPremium(u))
+                        u.setRoles("premium");
+                    else
+                        u.setRoles("customer");
+                }
+                
                 setUser(u);
                 return u;
             }
@@ -43,7 +58,19 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public List<User> getAllusers() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        return users;
+    }
+    
+    
+    @Override
+    public List<User> getAllusersNoCart() {
+        List<User> users = userRepository.findAll();
+        users.forEach((u) -> {
+            u.setCart(null);
+        });
+        
+        return users;
     }
 
     @Override
@@ -51,10 +78,11 @@ public class LoginServiceImpl implements LoginService {
         
         List<User> users = getAllusers();
         // if-satsen ska tas bort när vi skapat databasen
+        
         if(users.size() > 0){
         for (User u : users) {
             if (!(user.getUsername().equalsIgnoreCase(u.getUsername()))) {
-                user.setRoles();
+                user.setRoles("customer");
                 userRepository.save(user);
                 return user;
                 }
@@ -62,7 +90,7 @@ public class LoginServiceImpl implements LoginService {
         }
         // Detta ska vi ta bort när vi har skapat databasen
         else {
-            user.setRoles();
+            user.setRoles("customer");
             userRepository.save(user);
             return user;
         }

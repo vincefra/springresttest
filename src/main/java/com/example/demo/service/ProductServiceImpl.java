@@ -40,12 +40,20 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        List<Product> p = productRepository.findAll();
+        if (loginServiceImpl.getUser().getRoles().equalsIgnoreCase("premium"))
+        {
+            p.forEach((ptemp) -> {
+                ptemp.setPrice(ptemp.getPremiumPrice());
+            });
+        }
+            
+        return p;
     }
 
     @Override
     public Product findProductByProductId(long productId) {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = getAllProducts();
         for(Product p : products){
             if(p.getId() == productId){
                 return p;
@@ -72,7 +80,7 @@ public class ProductServiceImpl implements ProductService{
         loginServiceImpl.getUser().setCart(cart);
         
         //ny cartProduct
-        CartProduct cp = new CartProduct(product, cart, 1);
+        CartProduct cp = new CartProduct(product, cart, 1, user.getRoles().equalsIgnoreCase("premium"));
         
         //spara cart
         cartRepository.save(cart);

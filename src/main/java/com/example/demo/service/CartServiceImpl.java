@@ -40,14 +40,17 @@ public class CartServiceImpl implements CartService{
         List<Cart> carts = cartRepository.findAll();
         for(Cart c : carts)
             if(!c.isPurchased()){
-            if(c.getUser().getUsername().equalsIgnoreCase(loginServiceImpl.getUser().getUsername()))
-            {
-                c.setTotalprice(cartProductService.countTotalPrice(loginServiceImpl.getUser()));
-                c.setPurchased(true);
-                saveOrUpdate(c);
-                loginServiceImpl.getUser().setCart(new Cart());
-                return c;
-            }
+                if(c.getUser().getUsername().equalsIgnoreCase(loginServiceImpl.getUser().getUsername()))
+                {
+                    c.setTotalprice(cartProductService.countTotalPrice(loginServiceImpl.getUser()));
+                    c.setPurchased(true);
+                    saveOrUpdate(c);
+                    if (cartProductService.checkCartPremium(loginServiceImpl.getUser()))
+                        loginServiceImpl.getUser().setRoles("premium");
+
+                    loginServiceImpl.getUser().setCart(new Cart());
+                    return c;
+                }
             }
         return null;
     }

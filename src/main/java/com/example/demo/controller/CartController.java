@@ -69,4 +69,9 @@ final class CartController {
     ResponseEntity<List<Product>> postResult() {
         return ResponseEntity.ok(cartProductService.getCartProductsForCustomer());
     }
+    
+    @PostMapping("/check")
+    ResponseEntity<List<Product>> check(@RequestBody long customerId) {
+      return ResponseEntity.ok(cartProductService.getCartProductsForCustomer(customerId));
+    }
 }

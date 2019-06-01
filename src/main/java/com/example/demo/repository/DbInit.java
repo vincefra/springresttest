@@ -25,7 +25,7 @@ public class DbInit implements CommandLineRunner{
 
         User kenny = new User("kenny", "kenny", "kenny123");
         User johnny = new User("johnny", "johnny", "johnny123","admin");
-        User vincent = new User("vincent", "vincent", "vincent123");
+        User vincent = new User("vincent", "vincent", "vincent123", "admin");
 
         List<User> users = Arrays.asList(kenny, johnny, vincent);
 
@@ -33,13 +33,13 @@ public class DbInit implements CommandLineRunner{
         this.userRepository.saveAll(users);
 
         Product shoe1 = new Product("shoe1", "nike", "airforce", "nice shoe", 100);
-        Product shoe2 = new Product("shoe2", "nike", "airforce", "nice shoe", 100);
-        Product shoe3 = new Product("shoe3", "nike", "airforce", "nice shoe", 100);
+        Product shoe2 = new Product("shoe2", "nike", "airforce", "very nice shoe", 100);
+        Product shoe3 = new Product("shoe3", "nike", "airforce", "super nice shoe", 100);
+        Product shoe4 = new Product("shoe4", "nike", "batman", "dope shoe", 500000);
 
-        List<Product> shoes = Arrays.asList(shoe1, shoe2, shoe3);
+        List<Product> shoes = Arrays.asList(shoe1, shoe2, shoe3, shoe4);
 
         //sparar alla shor när programmt körs
         this.productRepository.saveAll(shoes);
-
     }
 }

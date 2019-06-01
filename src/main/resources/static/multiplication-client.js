@@ -1,9 +1,10 @@
 function displayProducts() {
     $.ajax(
         {
-            url: "/customer",
+            url: "/customer/products",
         }).then(function (data) {
-        $('#stats-body').empty();
+            $('#stats-body').empty();
+            
         data.forEach(function (row) 
         {
             $('#stats-body').append(
@@ -13,9 +14,73 @@ function displayProducts() {
                 "<td>" + row.brand + "</td>" +
                 "<td>" + row.description + "</td>" +
                 "<td>" + row.price + "</td>" +
-                "<td><button class='btn btn-success' onclick='addToCart(" + row.id + ")'>add To Cart</button></td></tr>");
+                "<td><button class='btn btn-info' onclick='displayProductInfo(" + JSON.stringify(row.description) + ")'>More info</button></td>" +
+                "<td><button class='btn btn-success' onclick='addToCart(" + row.id + ")'>Add to cart</button></td></tr>");
         }); 
         $("#cart-button").show();
+        $("#purchase-button").hide();
+        $("#product-button").hide();
+
+    });
+}
+
+function displayProductInfo(data) {
+  alert("Description - " + data);
+}
+
+
+function checkHistory(data){
+    var data = data;
+    $.ajax({
+            url: '/cart/check',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function (result) 
+            {
+                $('#stats-admin').hide();
+                $('#stats-body').empty();
+                $('#stats').show();
+                $("#admin-button").show();
+            
+                result.forEach(function (row) 
+                {
+                    $('#stats-body').append(
+                        "<tr>" + 
+                        "<td>" + row.id + "</td>" +
+                        "<td>" + row.name + "</td>" +
+                        "<td>" + row.brand + "</td>" +
+                        "<td>" + row.description + "</td>" +
+                        "<td>" + row.price + "</td>");
+                }); 
+            }
+        }); 
+}
+
+function displayForAdmin() {
+    $.ajax(
+        {
+            url: "/customer/admin",
+        }).then(function (data) {
+            
+            $('#stats-admin').show();
+            $('#stats-admin-body').empty();
+            $('#stats-body').empty();
+            $('#stats').hide();
+            $("#admin-button").hide();
+ 
+        data.forEach(function (row) 
+        {
+            $('#stats-admin-body').append(
+                "<tr>" + 
+                "<td>" + row.id + "</td>" +
+                "<td>" + row.name + "</td>" +
+                "<td>" + row.username + "</td>" +
+                "<td>" + row.roles + "</td>" +
+                "<td><button class='btn btn-success' onclick='checkHistory(" + row.id + ")'>Purchase history</button></td></tr>");
+        }); 
         $("#purchase-button").hide();
         $("#product-button").hide();
 
@@ -31,7 +96,7 @@ function displayCart() {
             $('#stats-body').append('<tr><td>' + row.id + '</td>' +
                     '<td>' + row.name + '</td>' +
                     '<td>' + row.brand + '</td>' +
-                    '<td>' + row.descrption + '</td>' +
+                    '<td>' + row.description + '</td>' +
                     '<td>' + row.price + '</td>' +
                     "<td><button class='btn btn-success remove-button' onclick='removeFromCart(" + row.id + ")'>Remove Product</button></td></tr>");
         });
@@ -60,11 +125,13 @@ function hideCartButtons(){
 
 function preLogin(){
     $("#stats").hide();
+    $("#stats-admin").hide();
     $("#reg-form").hide();
     $("#result-message").hide();
     $("#product-button").hide();
     $("#purchase-button").hide();
     $("#cart-button").hide();
+    $("#admin-button").hide();
 
 }
 
@@ -92,30 +159,6 @@ function purchase(){
                     $('.result-message').empty().append("No!");
                 }
             }); 
-}
-
-function purchase2(){
-    var data = 1;
-    $.ajax({
-            url: '/cart/purchased2',
-            type: 'POST',
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false,
-            success: function (result) {
-                console.log(result);
-                $("#result-message").show();
-                if (result.id >0) {
-                    $('#result-message').empty().append("You added a product: "+ result.id);
-                    $("#login-form").hide();
-                    $(".reg-button").hide();
-                    $(".stats").show();                    
-                } else {
-                    $('.result-message').empty().append("Ooops that's not correct! But keep trying!");
-                }
-            }
-        }); 
 }
 
 function addToCart(data){
@@ -188,14 +231,28 @@ $(document).ready(function () {
             async: false,
             success: function (result) {
                 console.log(result);
-                if (result.username !== null) {
-                    displayProducts();
-                    $('#result-message').empty().append("You have logged in: " + result.username);
-                    $("#login-form").hide();
-                    $("#reg-button").hide();
-                    $("#cart-button").show();
-                    $("#stats").show();                    
-                } else {
+                if (result.username !== null) 
+                {
+                    if (result.roles != "admin")
+                    {
+                        displayProducts();
+                        $('#result-message').empty().append("You have logged in: " + result.username + " - Role: " + result.roles);
+                        $("#login-form").hide();
+                        $("#reg-button").hide();
+                        $("#cart-button").show();
+                        $("#stats").show();  
+                    }
+                    else
+                    {
+                        displayForAdmin();
+                        $('#result-message').empty().append("You have logged in: " + result.username + " - Role: " + result.roles);
+                        $("#login-form").hide();
+                        $("#reg-button").hide();
+                        $("#stats-admin").show(); 
+                    }
+                } 
+                else 
+                {
                     $('#result-message').empty().append("Ooops that's not correct! But keep trying!");
                 }
             }
